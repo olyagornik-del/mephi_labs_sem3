@@ -48,4 +48,18 @@ public:
     explicit EndOfStream(const char* msg) : ParentForErrors(msg) {}
 };
 
+// элемент (ключ) уже есть в структуре — повторно не добавляем
+class AlreadyExists : public ParentForErrors {
+public:
+    AlreadyExists() : ParentForErrors("такой элемент уже есть") {}
+    explicit AlreadyExists(const char* msg) : ParentForErrors(msg) {}
+};
+
+// элемента (ключа) нет в структуре — нечего удалять/возвращать
+class NotFound : public ParentForErrors {
+public:
+    NotFound() : ParentForErrors("элемент не найден") {}
+    explicit NotFound(const char* msg) : ParentForErrors(msg) {}
+};
+
 #endif //LAB2_MY_STDEXCEPT_H
