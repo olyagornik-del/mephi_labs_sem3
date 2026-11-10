@@ -1,5 +1,5 @@
-void testBinarySearchTreeAll();
+void testAVLTreeAll();
 
 int main() {
-    testBinarySearchTreeAll();
+    testAVLTreeAll();
 }
