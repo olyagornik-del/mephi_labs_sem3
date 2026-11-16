@@ -219,6 +219,16 @@ public:
         return FindNode(item) != nullptr;
     }
 
+    // указатель на то, что лежит в дереве, или nullptr, если такого нет.
+    // нужен словарю: найти запись по ключу и достать из неё значение.
+    // const — чтобы снаружи нельзя было поменять найденное (поменяли бы ключ — узел оказался бы не на своём месте)
+    const T* Find(const T &item) const {
+        Node *node = FindNode(item);
+        if (node == nullptr)
+            return nullptr;
+        return &node->value;
+    }
+
     void Remove(const T &item) {
         root = RemoveFrom(root, item);
         count--;
