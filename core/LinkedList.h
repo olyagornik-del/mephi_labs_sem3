@@ -1,6 +1,7 @@
 #ifndef LAB2_LINKEDLIST_H
 #define LAB2_LINKEDLIST_H
 
+#include <utility> // std::swap
 #include "../my_except.h"
 
 template <class T>
@@ -54,6 +55,20 @@ public:
             other_current = other_current->next;
         }
         tail = current;
+    }
+    // присваивание: без него C++ копирует только указатели head/tail,
+    // и два списка делят одни узлы (а потом оба их удаляют).
+    // сначала делаем полную копию, потом меняемся с ней содержимым:
+    // наши старые узлы уходят в copy и удаляются её деструктором
+    LinkedList<T>& operator=(const LinkedList<T> &other_list) {
+        if (this == &other_list) { // l = l;
+            return *this;
+        }
+        LinkedList<T> copy(other_list);
+        std::swap(head, copy.head);
+        std::swap(tail, copy.tail);
+        std::swap(size, copy.size);
+        return *this;
     }
 
     //получаем размер списка

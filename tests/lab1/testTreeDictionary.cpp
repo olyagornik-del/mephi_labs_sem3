@@ -3,17 +3,7 @@
 #include <string>
 
 #include "../../atd/TreeDictionary.h"
-
-// прообраз будущей координаты Coord из ЛР-2: сравнение сначала по x, потом по y
-struct Point {
-    int x;
-    int y;
-    bool operator<(const Point &other) const {
-        if (x != other.x)
-            return x < other.x;
-        return y < other.y;
-    }
-};
+#include "testTypes.h" // Point
 
 void testTreeDictionaryEmpty() {
     TreeDictionary<int, int> Dict;

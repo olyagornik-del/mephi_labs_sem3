@@ -1,6 +1,7 @@
 #ifndef LAB2_DYNAMICARRAY_H
 #define LAB2_DYNAMICARRAY_H
 
+#include <utility> // std::swap
 #include "../my_except.h"
 
 template <class T>
@@ -42,13 +43,41 @@ public:
         }
         capacity = size;
     }
+    // присваивание: без него C++ копирует только указатель data,
+    // и два массива делят одну память (а потом оба делают delete[]).
+    // сначала полная копия, потом меняемся с ней — старое удалит деструктор copy
+    DynamicArray<T>& operator=(const DynamicArray<T> &other_arr) {
+        if (this == &other_arr) { // a = a;
+            return *this;
+        }
+        DynamicArray<T> copy(other_arr);
+        std::swap(data, copy.data);
+        std::swap(size, copy.size);
+        std::swap(capacity, copy.capacity);
+        return *this;
+    }
 
     //получаем размер списка
     int GetSize() const {
         return size;
     }
-    // достаём элемент по индексу
+    // достаём элемент по индексу (копию)
     T Get(int index) const {
+        if (index < 0 || index >= size) {
+            throw OutOfRange("index", index, 0, size - 1);
+        }
+        return data[index];
+    }
+    // достаём сам элемент (ссылку), а не копию: через неё можно менять элемент на месте.
+    // нужно, когда элемент большой (например список-корзина в хеш-таблице)
+    T& GetRef(int index) {
+        if (index < 0 || index >= size) {
+            throw OutOfRange("index", index, 0, size - 1);
+        }
+        return data[index];
+    }
+    // то же для const-массива: читать можно, менять нельзя
+    const T& GetRef(int index) const {
         if (index < 0 || index >= size) {
             throw OutOfRange("index", index, 0, size - 1);
         }
